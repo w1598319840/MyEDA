@@ -1,0 +1,182 @@
+{
+Coon_01x04
+	[
+	Center 415 260
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y -60
+		width 30
+		height 120
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y -47
+		width 15
+		height 5
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y -17
+		width 15
+		height 5
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y 13
+		width 15
+		height 5
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y 43
+		width 15
+		height 5
+		)
+	Line
+		(
+		lineColor 132 0 0 
+		lineWidth 2
+		x1 -55
+		y1 -45
+		x2 15
+		y2 -45
+		)
+	Line
+		(
+		lineColor 132 0 0 
+		lineWidth 2
+		x1 -55
+		y1 -15
+		x2 -15
+		y2 -15
+		)
+	Line
+		(
+		lineColor 132 0 0 
+		lineWidth 2
+		x1 -55
+		y1 15
+		x2 -15
+		y2 15
+		)
+	Line
+		(
+		lineColor 132 0 0 
+		lineWidth 2
+		x1 -55
+		y1 45
+		x2 -15
+		y2 45
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y -53
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y -23
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y 7
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y 37
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y -65
+		content 1
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y -35
+		content 2
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y -5
+		content 3
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y 25
+		content 4
+		degree 0
+		)
+	Text
+		(
+		textColor 2 101 101
+		textSize 15
+		x -5
+		y -85
+		content J
+		degree 0
+		)
+	Text
+		(
+		textColor 2 101 101
+		textSize 14
+		x -55
+		y 62
+		content Coon_01x04
+		degree 0
+		)
+	]
+}

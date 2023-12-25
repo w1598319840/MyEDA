@@ -1,0 +1,71 @@
+{
+Resistance             
+	[
+        Center 215 200
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 3
+		brushColor -1 -1 -1
+		x -15
+		y -50
+		width 30
+		height 100
+		)	
+	Line
+		(
+		lineColor 132 0 0 
+		lineWidth 2
+		x1 0
+		y1 -50
+		x2 0
+		y2 -70
+		)	
+	Line
+		(
+		lineColor 132 0 0 
+		lineWidth 2
+		x1 0
+		y1 50
+		x2 0
+		y2 70
+		)
+	Text
+		(
+		textColor 0 100 100
+		textSize 20
+		x -15
+		y 5
+		content R
+		degree 90
+		)
+	Text
+		(
+		textColor 0 100 100
+		textSize 20
+		x -15
+		y 5
+		content R
+		degree 90
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 15
+		x -10
+		y -70
+		content 无源
+		degree 90	
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 15
+		x -10
+		y 120
+		content 无源
+		degree 90
+		)
+	]
+
+}

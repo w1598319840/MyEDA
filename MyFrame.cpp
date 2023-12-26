@@ -124,15 +124,23 @@ MyFrame::MyFrame(const wxString& title, const wxSize& size) :wxFrame(NULL, wxID_
 	//MyPanel* myPanel = new MyPanel(this);
 	wxMenuBar* menuBar = new wxMenuBar();
 	wxMenu* fileMenu = new wxMenu();
+	fileMenu->Append(wxID_NEW, "new", "Create a new file");
 	fileMenu->Append(wxID_OPEN, "Open", "Open a file");
 	fileMenu->Append(wxID_SAVE, "Save", "Save the current file");
 	fileMenu->Append(wxID_EXIT, "Exit", "Exit the application");
 	menuBar->Append(fileMenu, "File");
 	SetMenuBar(menuBar);
 
+	Bind(wxEVT_MENU, &MyFrame::OnNew, this, wxID_NEW);
 	Bind(wxEVT_MENU, &MyFrame::OnOpen, this, wxID_OPEN);
 	Bind(wxEVT_MENU, &MyFrame::OnSave, this, wxID_SAVE);
 	Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+}
+
+void MyFrame::OnNew(wxCommandEvent& event) {
+	allComponent.clear();
+	OnSave(event);
+	myPanel->Refresh();
 }
 
 void MyFrame::OnOpen(wxCommandEvent& event) {

@@ -478,5 +478,4 @@ void Component::saveComponent(vector<Component>& allComponent, string destPath) 
 
 	}
 	destFile.close();
-	wxMessageBox("保存完毕！");
 }

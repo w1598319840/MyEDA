@@ -29,6 +29,7 @@ class MyFrame : public wxFrame {
 	MyPanel* myPanel = new MyPanel(this);
 public:
 	MyFrame(const wxString& title, const wxSize& size);
+	void OnNew(wxCommandEvent& event);
 	void OnOpen(wxCommandEvent& event);
 	void OnSave(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);

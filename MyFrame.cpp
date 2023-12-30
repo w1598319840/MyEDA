@@ -2,12 +2,10 @@
 #include "ContainView.h"
 #include <wx/wx.h>
 #include <ctime>
+#define SAVE_NET 5023
 
 MyPanel::MyPanel(wxFrame* parent) : wxPanel(parent) {
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
-	wxButton* button1 = new wxButton(this, wxID_ANY, "添加电气元件", wxPoint(20, 20), wxSize(80, 30));
-	button1->Bind(wxEVT_BUTTON, &MyPanel::OnButton1Click, this);
-
 	Bind(wxEVT_MOTION, &MyPanel::OnMouseMove, this);
 	Bind(wxEVT_LEFT_DOWN, &MyPanel::OnMouseLeftDown, this);
 	Bind(wxEVT_LEFT_UP, &MyPanel::OnMouseLeftUp, this);
@@ -65,7 +63,7 @@ void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
 	{
 		int dist = (allComponent[i].centerX - temX) * (allComponent[i].centerX - temX) + (allComponent[i].centerY - temY) * (allComponent[i].centerY - temY);
 		cout << dist << endl;
-		if (dist <= 20000)
+		if (dist <= 2000)
 		{
 			cur = i;
 			originalX = allComponent[i].centerX;
@@ -114,37 +112,42 @@ void MyPanel::OnPaint(wxPaintEvent& event) {
 	//dc.Blit(0, 0, GetClientSize().GetWidth(), GetClientSize().GetHeight(), &memDC, 0, 0);
 }
 
-void MyPanel::OnButton1Click(wxCommandEvent& event) {
-	new ComponentSelection("选择符号", wxSize(800, 600), this);
-}
-
 MyFrame::MyFrame(const wxString& title, const wxSize& size) :wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, size)
 {
 	Centre();
 	//MyPanel* myPanel = new MyPanel(this);
 	wxMenuBar* menuBar = new wxMenuBar();
 	wxMenu* fileMenu = new wxMenu();
-	fileMenu->Append(wxID_NEW, "new", "Create a new file");
-	fileMenu->Append(wxID_OPEN, "Open", "Open a file");
-	fileMenu->Append(wxID_SAVE, "Save", "Save the current file");
-	fileMenu->Append(wxID_EXIT, "Exit", "Exit the application");
-	menuBar->Append(fileMenu, "File");
+	wxMenu* componentMenu = new wxMenu();
+	fileMenu->Append(wxID_NEW, "新建", "新建一个文件");
+	fileMenu->Append(wxID_OPEN, "打开", "打开文件");
+	fileMenu->Append(wxID_SAVE, "导出原理图", "导出当前文件为原理图");
+	fileMenu->Append(SAVE_NET, "导出网表", "导出当前文件为网表");
+	fileMenu->Append(wxID_EXIT, "退出", "退出程序");
+	componentMenu->Append(wxID_ADD, "选择符号", "添加一个电气元件");
+	menuBar->Append(fileMenu, "文件");
+	menuBar->Append(componentMenu, "元件");
 	SetMenuBar(menuBar);
 
 	Bind(wxEVT_MENU, &MyFrame::OnNew, this, wxID_NEW);
 	Bind(wxEVT_MENU, &MyFrame::OnOpen, this, wxID_OPEN);
-	Bind(wxEVT_MENU, &MyFrame::OnSave, this, wxID_SAVE);
+	Bind(wxEVT_MENU, &MyFrame::OnSave_sch, this, wxID_SAVE);
 	Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+	Bind(wxEVT_MENU, &MyFrame::OnSave_net, this, SAVE_NET);
+	Bind(wxEVT_MENU, &MyFrame::addComponent, this, wxID_ADD);
+}
+
+void MyFrame::addComponent(wxCommandEvent& event) {
+	new ComponentSelection("选择符号", wxSize(800, 600), myPanel);
 }
 
 void MyFrame::OnNew(wxCommandEvent& event) {
 	allComponent.clear();
-	OnSave(event);
+	OnSave_sch(event);
 	myPanel->Refresh();
 }
 
 void MyFrame::OnOpen(wxCommandEvent& event) {
-	string filePath;
 	wxFileDialog openFileDialog(this, "路径选择", "", "", ".lyx文件 (*.lyx)|*.lyx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (openFileDialog.ShowModal() == wxID_OK) {
 		filePath = openFileDialog.GetPath();
@@ -154,12 +157,25 @@ void MyFrame::OnOpen(wxCommandEvent& event) {
 
 }
 
-void MyFrame::OnSave(wxCommandEvent& event) {
+void MyFrame::OnSave_sch(wxCommandEvent& event) {
 	string destPath;
 	wxFileDialog saveFileDialog(this, "路径选择", "", "", ".lyx文件 (*.lyx)|*.lyx", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_OK) {
 		destPath = saveFileDialog.GetPath();
-		Component::saveComponent(allComponent, destPath);
+		Component::saveComponent_sch(allComponent, destPath);
+	}
+}
+
+void MyFrame::OnSave_net(wxCommandEvent& event) {
+	if (filePath == "") {
+		wxMessageBox("需要先保存文件为原理图!");
+		return;
+	}
+	string destPath;
+	wxFileDialog saveFileDialog(this, "路径选择", "", "", ".net文件 (*.net)|*.net", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	if (saveFileDialog.ShowModal() == wxID_OK) {
+		destPath = saveFileDialog.GetPath();
+		Component::saveComponent_net(allComponent, destPath, filePath);
 	}
 }
 

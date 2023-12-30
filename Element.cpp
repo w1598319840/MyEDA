@@ -1,9 +1,14 @@
 ﻿#include "Element.h"
+#include <chrono>
+#include <sstream>
+#include <iomanip>
 
 void MyText::draw(wxDC& dc) {
 	dc.SetFont(wxFont(textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 	dc.SetTextForeground(wxColour(tr, tg, tb));
-	dc.DrawRotatedText(content, x + centerx, y + centery, degree);
+	if (content != "无源") {
+		dc.DrawRotatedText(content, x + centerx, y + centery, degree);
+	}
 }
 void MyText::readText(int centerX, int centerY) {
 	centerx = centerX;
@@ -55,7 +60,7 @@ void MyText::addText(vector<Component>& allComponent, int x, int y, int degree, 
 	allComponent[allComponent.size() - 1].vText.push_back(text);
 }
 
-void MyText::saveText(MyText text, ofstream& destFile) {
+void MyText::saveText_sch(MyText text, ofstream& destFile) {
 	destFile << "\tText\n";
 	destFile << "\t\t(\n";
 	destFile << "\t\ttextColor " << text.tr << " " << text.tg << " " << text.tb << "\n";
@@ -175,7 +180,7 @@ void MyLine::addLine(vector<Component>& allComponent, int x1, int y1, int x2, in
 	allComponent[allComponent.size() - 1].vLine.push_back(line);
 }
 
-void MyLine::saveLine(MyLine line, ofstream& destFile) {
+void MyLine::saveLine_sch(MyLine line, ofstream& destFile) {
 	destFile << "\tLine\n";
 	destFile << "\t\t(\n";
 	destFile << "\t\tlineColor " << line.lr << " " << line.lg << " " << line.lb << "\n";
@@ -310,7 +315,7 @@ void MyRectangle::addRectangle(vector<Component>& allComponent, int x, int y, in
 	allComponent[allComponent.size() - 1].vRectangle.push_back(rectangle);
 }
 
-void MyRectangle::saveRectangle(MyRectangle rectangle, ofstream& destFile) {
+void MyRectangle::saveRectangle_sch(MyRectangle rectangle, ofstream& destFile) {
 	destFile << "\tRectangle\n";
 	destFile << "\t\t(\n";
 	destFile << "\t\tpenColor " << rectangle.pr << " " << rectangle.pg << " " << rectangle.pb << "\n";
@@ -457,7 +462,7 @@ void Component::readComponent(vector<Component>& allComponent) {
 	}
 }
 
-void Component::saveComponent(vector<Component>& allComponent, string destPath) {
+void Component::saveComponent_sch(vector<Component>& allComponent, string destPath) {
 	ofstream destFile(destPath);
 	for (Component component : allComponent) {
 		destFile << "{\n";
@@ -465,17 +470,43 @@ void Component::saveComponent(vector<Component>& allComponent, string destPath) 
 		destFile << "\t[\n";
 		destFile << "\tCenter " << component.centerX << " " << component.centerY << "\n";
 		for (MyRectangle rectangle : component.vRectangle) {
-			rectangle.saveRectangle(rectangle, destFile);
+			rectangle.saveRectangle_sch(rectangle, destFile);
 		}
 		for (MyLine line : component.vLine) {
-			line.saveLine(line, destFile);
+			line.saveLine_sch(line, destFile);
 		}
 		for (MyText text : component.vText) {
-			text.saveText(text, destFile);
+			text.saveText_sch(text, destFile);
 		}
 		destFile << "\t]\n";
 		destFile << "}\n";
 
 	}
 	destFile.close();
+}
+
+void Component::saveComponent_net(vector<Component>& allComponent, string destPath, string filePath) {
+	ofstream destFile(destPath);
+	destFile << "(export (version \"E\")\n";
+	destFile << "\t(design\n";
+	destFile << "\t\t(source " << "\"" << filePath << "\")\n";
+	auto now = chrono::system_clock::now();
+	time_t now_time = chrono::system_clock::to_time_t(now);
+	tm* local_time = localtime(&now_time);
+	stringstream ss;
+	ss << put_time(local_time, "%Y-%m-%d %H:%M:%S");
+	string current_time = ss.str();
+	destFile << "\t\t(date " << "\"" << current_time << "\")\n";
+	destFile << "\t\t(tool \"LYXCAD 1.0.0\")\n";
+	destFile << "\t\t(sheet (number \"1\") (name \" / \") (tstamps \" / \"))\n";
+	destFile << "\t)\n";
+	destFile << "\t(components\n";
+	for (Component component : allComponent) {
+		destFile << "\t\t(comp (ref \"" << component.name << "\"" << ")\n";
+		destFile << "\t\t\t(value \"" << component.name << "\"" << ")\n";
+		destFile << "\t\t\t(footprint \"UserLib:" << component.name << "\")\n";
+		destFile << "\t\t)\n";
+	}
+	destFile << "\t)\n";
+	destFile << ")\n";
 }

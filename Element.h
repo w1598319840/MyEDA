@@ -23,7 +23,7 @@ public:
 public:
 	static void addText(vector<Component>& allComponent, int x, int y, int degree, int textSize, int tr, int ig, int ib, string content);
 public:
-	void saveText(MyText text, ofstream& destFile);
+	void saveText_sch(MyText text, ofstream& destFile);
 };
 
 class MyCircle {
@@ -47,7 +47,7 @@ public:
 public:
 	static void addLine(vector<Component>& allComponent, int x1, int y1, int x2, int y2, int lr, int lg, int lb, int lineWidth);
 public:
-	void saveLine(MyLine line, ofstream& destFile);
+	void saveLine_sch(MyLine line, ofstream& destFile);
 };
 
 class MyPolygon {
@@ -73,7 +73,7 @@ public:
 public:
 	static void addRectangle(vector<Component>& allComponent, int x, int y, int width, int height, int penWidth, int pr, int pg, int pb, int br, int bg, int bb);
 public:
-	void saveRectangle(MyRectangle rectangle, ofstream& destFile);
+	void saveRectangle_sch(MyRectangle rectangle, ofstream& destFile);
 };
 
 class MyCurve {
@@ -110,7 +110,9 @@ public:
 public:
 	void readComponent(vector<Component>& allComponent);
 public:
-	static void saveComponent(vector<Component>& allComponent, string destPath);
+	static void saveComponent_sch(vector<Component>& allComponent, string destPath);
+public:
+	static void saveComponent_net(vector<Component>& allComponent, string destPath, string filePath);
 };
 
 #endif

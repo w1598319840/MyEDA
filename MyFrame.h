@@ -16,7 +16,6 @@ public:
 	bool isDragging;
 
 	void OnPaint(wxPaintEvent& event);
-	void OnButton1Click(wxCommandEvent& event);
 	void OnMouseMove(wxMouseEvent& event);
 	void OnMouseLeftDown(wxMouseEvent& event);
 	void OnMouseLeftUp(wxMouseEvent& event);
@@ -27,11 +26,14 @@ public:
 
 class MyFrame : public wxFrame {
 	MyPanel* myPanel = new MyPanel(this);
+	string filePath = "";
 public:
 	MyFrame(const wxString& title, const wxSize& size);
+	void addComponent(wxCommandEvent& event);
 	void OnNew(wxCommandEvent& event);
 	void OnOpen(wxCommandEvent& event);
-	void OnSave(wxCommandEvent& event);
+	void OnSave_sch(wxCommandEvent& event);
+	void OnSave_net(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
 };
 

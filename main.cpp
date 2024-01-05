@@ -7,8 +7,6 @@
 #include "Element.h"
 #include "ComponentSelection.h"
 #include "MyFrame.h"
-
-
 using namespace std;
 vector<Component> allComponent;
 vector<Net>allNet;

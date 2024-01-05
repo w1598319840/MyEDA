@@ -8,19 +8,20 @@ extern std::vector<Net> allNet;
 MyPanel::MyPanel(wxFrame* parent) : wxPanel(parent) {
 	ConnectButton = new wxButton(this, wxID_ANY, wxT("连线"));
 
-	// 绑定按钮点击事件处理函数
 	ConnectButton->Bind(wxEVT_BUTTON, &MyPanel::Connect, this);
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
 	Bind(wxEVT_MOTION, &MyPanel::OnMouseMove, this);
 	Bind(wxEVT_LEFT_DOWN, &MyPanel::OnMouseLeftDown, this);
 	Bind(wxEVT_LEFT_UP, &MyPanel::OnMouseLeftUp, this);
 	Bind(wxEVT_LEFT_DCLICK, &MyPanel::OnMouseDoubleClick, this);
-
+	SetBackgroundColour(wxColor(245, 244, 239));
 }
+
 void MyPanel::Connect(wxCommandEvent& event) {
 	isConnecting = true;
 }
-void MyPanel::Drag(wxMouseEvent& event){
+
+void MyPanel::Drag(wxMouseEvent& event) {
 	if (cur == -1)return;
 
 	// 计算鼠标移动的距离
@@ -56,18 +57,19 @@ void MyPanel::Drag(wxMouseEvent& event){
 	if (b - a > 1000 / 60)Refresh(), a = clock();
 }
 
-
 void MyPanel::OnMouseMove(wxMouseEvent& event) {
 	if (isDragging) {
 		Drag(event);
 	}
 	if (isConnecting) {
-		;
 	}
 	event.Skip();
 }
 
 void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
+	// 标记开始拖动，并记录初始鼠标位置
+	isDragging = true;
+	a = clock();
 	int temX = event.GetPosition().x;
 	int temY = event.GetPosition().y;
 	// 如果处于画线阶段
@@ -102,6 +104,7 @@ void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
 void MyPanel::OnMouseLeftUp(wxMouseEvent& event) {
 	// 停止拖动
+	isDragging = false;
 	if (isConnecting == 1) {
 		if (isDrawing == 1)return;
 		isConnecting = 0;
@@ -135,7 +138,9 @@ void MyPanel::OnMouseDoubleClick(wxMouseEvent& event)
 
 void MyPanel::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this);
-	/* 开始绘图 */
+
+	wxSize size = GetClientSize();
+	Component::drawInformation(dc, allComponent, size);
 	Component::drawComponent(dc, allComponent);
 	Net::drawNet(dc, allNet);
 }

@@ -380,9 +380,15 @@ void Component::readFile(vector<Component>& allComponent, int flag, string fileP
 	string s;
 	while (cin >> s) {
 		if (s == "{") {
+			cin >> s;
 			allComponent.push_back(Component());
-			cin >> allComponent[allComponent.size() - 1].name;
-			allComponent[allComponent.size() - 1].readComponent(allComponent);
+			if (s == "Information") {
+				allComponent[allComponent.size() - 1].readInformation(allComponent);
+			}
+			else {
+				allComponent[allComponent.size() - 1].name = s;
+				allComponent[allComponent.size() - 1].readComponent(allComponent);
+			}
 		}
 	}
 }
@@ -408,6 +414,24 @@ void Component::drawComponent(wxDC& dc, vector<Component>& allComponent) {
 			allComponent[i].vText[j].draw(dc);
 		}
 	}
+}
+
+void Component::drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size) {
+	int width = size.GetWidth();
+	int height = size.GetHeight();
+	int	x = size.x;
+	int y = size.y;
+	dc.SetPen(wxPen(wxColor(132, 0, 0), 1));
+	dc.SetBrush(wxColor(245, 244, 239));
+	dc.DrawRectangle(0.60 * x, 0.82 * y, width - 0.60 * x, height - 0.82 * y);
+	dc.DrawLine(0.60 * x, 0.90 * y, x, 0.90 * y);
+	dc.DrawLine(0.60 * x, 0.93 * y, x, 0.93 * y);
+	dc.DrawLine(0.60 * x, 0.955 * y, x, 0.955 * y);
+	dc.DrawLine(0.60 * x, 0.973 * y, x, 0.973 * y);
+	dc.DrawLine(0.675 * x, 0.955 * y, 0.675 * x, 0.973 * y);
+	dc.DrawLine(0.906 * x, 0.955 * y, 0.906 * x, 0.973 * y);
+
+
 }
 
 void Component::readComponent(vector<Component>& allComponent) {
@@ -462,6 +486,27 @@ void Component::readComponent(vector<Component>& allComponent) {
 	}
 }
 
+void Component::readInformation(vector<Component>& allComponent) {
+	string s;
+	while (cin >> s) {
+		if (s == "Paper") {
+			cin >> paper;
+		}
+		if (s == "Title") {
+			cin >> title;
+		}
+		if (s == "Date") {
+			cin >> date;
+		}
+		if (s == "Rev") {
+			cin >> rev;
+		}
+		if (s == "}") {
+			return;
+		}
+	}
+}
+
 void Component::saveComponent_sch(vector<Component>& allComponent, string destPath) {
 	ofstream destFile(destPath);
 	for (Component component : allComponent) {
@@ -511,10 +556,10 @@ void Component::saveComponent_net(vector<Component>& allComponent, string destPa
 	destFile << ")\n";
 }
 
-void Net::drawNet(wxDC& dc, vector<Net>& allNet){
+void Net::drawNet(wxDC& dc, vector<Net>& allNet) {
 	for (int i = 0; i < allNet.size(); i++) {
 
-		dc.SetPen(wxPen(wxColor(0,150,0), 2));
+		dc.SetPen(wxPen(wxColor(0, 150, 0), 2));
 		int midx = (allNet[i].Px[0] + allNet[i].Px[1]) / 2;
 		dc.DrawLine(allNet[i].Px[0], allNet[i].Py[0], midx, allNet[i].Py[0]);
 		dc.DrawLine(midx, allNet[i].Py[0], midx, allNet[i].Py[1]);

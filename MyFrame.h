@@ -18,7 +18,6 @@ public:
 	bool isConnecting;
 	bool isDrawing;
 
-
 	void OnPaint(wxPaintEvent& event);
 	void OnMouseMove(wxMouseEvent& event);
 	void Drag(wxMouseEvent& event);

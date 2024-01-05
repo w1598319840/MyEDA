@@ -8,14 +8,13 @@ extern std::vector<Net> allNet;
 MyPanel::MyPanel(wxFrame* parent) : wxPanel(parent) {
 	ConnectButton = new wxButton(this, wxID_ANY, wxT("连线"));
 
-	// 绑定按钮点击事件处理函数
-	ConnectButton->Bind(wxEVT_BUTTON, &MyPanel::OnConnect, this);
+	ConnectButton->Bind(wxEVT_BUTTON, &MyPanel::Connect, this);
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
 	Bind(wxEVT_MOTION, &MyPanel::OnMouseMove, this);
 	Bind(wxEVT_LEFT_DOWN, &MyPanel::OnMouseLeftDown, this);
 	Bind(wxEVT_LEFT_UP, &MyPanel::OnMouseLeftUp, this);
 	Bind(wxEVT_LEFT_DCLICK, &MyPanel::OnMouseDoubleClick, this);
-
+	SetBackgroundColour(wxColor(245, 244, 239));
 }
 
 void MyPanel::MyRefresh() {
@@ -27,7 +26,8 @@ void MyPanel::MyRefresh() {
 void MyPanel::OnConnect(wxCommandEvent& event) {
 	isConnecting = true;
 }
-void MyPanel::Drag(wxMouseEvent& event){
+
+void MyPanel::Drag(wxMouseEvent& event) {
 	if (cur == -1)return;
 
 	// 计算鼠标移动的距离
@@ -58,6 +58,7 @@ void MyPanel::Drag(wxMouseEvent& event){
 		allComponent[cur].vText[i].centerx += disX;
 		allComponent[cur].vText[i].centery += disY;
 	}
+	//cout << cur << " " << allComponent[cur].vLine[0].x1 << " " << allComponent[cur].vLine[0].y1 << endl;
 	MyRefresh();
 }
 
@@ -71,8 +72,8 @@ void MyPanel::Connect(wxMouseEvent& event) {
 		allNet[nw].Py.push_back(temY);
 	}
 	else {
-		allNet[nw].Px[1]=temX;
-		allNet[nw].Py[1]=temY;
+		allNet[nw].Px[1] = temX;
+		allNet[nw].Py[1] = temY;
 	}
 	MyRefresh();
 };
@@ -161,7 +162,9 @@ void MyPanel::OnMouseDoubleClick(wxMouseEvent& event)
 
 void MyPanel::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this);
-	/* 开始绘图 */
+
+	wxSize size = GetClientSize();
+	Component::drawInformation(dc, allComponent, size);
 	Component::drawComponent(dc, allComponent);
 	Net::drawNet(dc, allNet);
 }
@@ -206,7 +209,6 @@ void MyFrame::OnOpen(wxCommandEvent& event) {
 	if (openFileDialog.ShowModal() == wxID_OK) {
 		destPath = openFileDialog.GetPath();
 		Component::readFile(allComponent, 0, destPath);//调用静态函数
-		Net::readFile(allNet,0, destPath);
 		myPanel->Refresh();
 	}
 
@@ -216,10 +218,9 @@ void MyFrame::OnSave_sch(wxCommandEvent& event) {
 	wxFileDialog saveFileDialog(this, "路径选择", "", "", ".lyx文件 (*.lyx)|*.lyx", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_OK) {
 		destPath = saveFileDialog.GetPath();
-		ofstream destFile(destPath);
-		Component::saveComponent_sch(allComponent, destFile);
-		Net::SaveNet_sch(allNet,destFile);
-		destFile.close();
+		string fileName;
+		fileName = saveFileDialog.GetFilename();
+		Component::saveComponent_sch(allComponent, destPath, fileName);
 	}
 }
 
@@ -233,7 +234,6 @@ void MyFrame::OnSave_net(wxCommandEvent& event) {
 	if (saveFileDialog.ShowModal() == wxID_OK) {
 		destPath = saveFileDialog.GetPath();
 		Component::saveComponent_net(allComponent, destPath, destPath);
-		Net::SaveNet_net(allNet, destPath, destPath);
 	}
 }
 

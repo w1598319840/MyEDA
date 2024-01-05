@@ -2,6 +2,8 @@
 #include <chrono>
 #include <sstream>
 #include <iomanip>
+extern Information infor;
+extern vector<Net> allNet;
 
 void MyText::draw(wxDC& dc) {
 	dc.SetFont(wxFont(textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
@@ -252,6 +254,7 @@ void MyRectangle::draw(wxDC& dc) {
 	else {
 		dc.SetBrush(wxColor(br, bg, bb));
 	}
+	//printf("%d %d %d %d %d %d\n",x,y,centerx,centery,x+centerx,y+centery);
 	dc.DrawRectangle(x + centerx, y + centery, width, height);
 }
 
@@ -379,32 +382,23 @@ void Component::readFile(vector<Component>& allComponent, int flag, string fileP
 	string s;
 	while (cin >> s) {
 		if (s == "{") {
-			allComponent.push_back(Component());
-			cin >> allComponent[allComponent.size() - 1].name;
-			allComponent[allComponent.size() - 1].readComponent(allComponent);
-		}
-		else if (s == "------")break;
-	}
-}
-void Net::readFile(vector<Net>& allNet, int flag, string filePath) {
-	if (flag == 0) {//flag为0时，把vector数组中所有数据清空，此时是执行导入文件的程序
-		allNet.clear();
-		freopen(filePath.c_str(), "r", stdin);
-	}
-	if (flag == 1) {//flag为1时,此时执行添加电气元件，因此不用清空
-		freopen(filePath.c_str(), "r", stdin);
-	}
-	cin.clear();
-	cin.seekg(0, ios::beg);
-	//freopen("F:\\MyEDAComponent\\component.txt", "r", stdin);
-	string s;
-	while (cin >> s) {
-		if (s == "{") {
-			allNet.push_back(Net());
-			allNet[allNet.size() - 1].ReadNet(allNet);
+			cin >> s;
+			if (s == "Information") {
+				infor.readInformation(allComponent);
+			}
+			else if (s == "Net") {
+				Net::readNet(allNet, 0, filePath);
+			}
+			else {
+				allComponent.push_back(Component());
+				int i = allComponent.size() - 1;
+				allComponent[i].name = s;
+				allComponent[i].readComponent(allComponent);
+			}
 		}
 	}
 }
+
 void Component::drawComponent(wxDC& dc, vector<Component>& allComponent) {
 	for (int i = 0; i < allComponent.size(); i++) {
 		for (int j = 0; j < allComponent[i].vCircle.size(); j++) {
@@ -428,9 +422,55 @@ void Component::drawComponent(wxDC& dc, vector<Component>& allComponent) {
 	}
 }
 
+void Component::drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size) {
+	int width = size.GetWidth();
+	int height = size.GetHeight();
+	int	x = size.x;
+	int y = size.y;
+	dc.SetPen(wxPen(wxColor(132, 0, 0), 1));
+	dc.SetBrush(wxColor(245, 244, 239));
+	dc.DrawRectangle(0.60 * x, 0.82 * y, width - 0.599 * x, height - 0.82 * y);
+	dc.DrawLine(0.60 * x, 0.90 * y, x, 0.90 * y);
+	dc.DrawLine(0.60 * x, 0.93 * y, x, 0.93 * y);
+	dc.DrawLine(0.60 * x, 0.955 * y, x, 0.955 * y);
+	dc.DrawLine(0.60 * x, 0.973 * y, x, 0.973 * y);
+	dc.DrawLine(0.675 * x, 0.955 * y, 0.675 * x, 0.973 * y);
+	dc.DrawLine(0.906 * x, 0.955 * y, 0.906 * x, 0.973 * y);
+
+	dc.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT));
+	dc.SetTextForeground(wxColour(132, 0, 0));
+	if (allComponent.size() == 0) {
+		dc.DrawRotatedText("Sheet: ", 0.605 * x, 0.901 * y, 0);
+		dc.DrawRotatedText("File: ", 0.605 * x, 0.915 * y, 0);
+		dc.SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+		dc.DrawRotatedText("Title: ", 0.605 * x, 0.932 * y, 0);
+		dc.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT));
+		dc.SetTextForeground(wxColour(132, 0, 0));
+		dc.DrawRotatedText("Size: ", 0.605 * x, 0.9565 * y, 0);
+		dc.DrawRotatedText("Date: ", 0.68 * x, 0.9565 * y, 0);
+		dc.DrawRotatedText("Rev: ", 0.91 * x, 0.9565 * y, 0);
+	}
+	else {
+		dc.DrawRotatedText("Sheet: /", 0.605 * x, 0.901 * y, 0);
+		dc.DrawRotatedText("File: " + infor.file, 0.605 * x, 0.915 * y, 0);
+		dc.SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+		dc.DrawRotatedText("Title: " + infor.title, 0.605 * x, 0.932 * y, 0);
+		dc.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT));
+		dc.SetTextForeground(wxColour(132, 0, 0));
+		dc.DrawRotatedText("Size: " + infor.size, 0.605 * x, 0.9565 * y, 0);
+		dc.DrawRotatedText("Date: " + infor.date, 0.68 * x, 0.9565 * y, 0);
+		dc.DrawRotatedText("Rev: " + infor.rev, 0.91 * x, 0.9565 * y, 0);
+	}
+	dc.DrawRotatedText("MyCad E.D.A   mycad 1.0.0 ", 0.605 * x, 0.98 * y, 0);
+
+
+}
+
 void Component::readComponent(vector<Component>& allComponent) {
 	string s;
+
 	while (cin >> s) {
+
 		if (s == "[") {
 			while (s != "]") {
 				int k = allComponent.size() - 1;
@@ -478,7 +518,33 @@ void Component::readComponent(vector<Component>& allComponent) {
 	}
 }
 
-void Component::saveComponent_sch(vector<Component>& allComponent, ofstream& destFile) {
+void Information::readInformation(vector<Component>& allComponent) {
+	string s;
+	while (cin >> s) {
+		if (s == "Size") {
+			cin >> infor.size;
+		}
+		if (s == "Title") {
+			cin >> infor.title;
+		}
+		if (s == "Date") {
+			cin >> infor.date;
+		}
+		if (s == "Rev") {
+			cin >> infor.rev;
+		}
+		if (s == "File") {
+			cin >> infor.file;
+		}
+		if (s == "}") {
+			return;
+		}
+	}
+}
+
+void Component::saveComponent_sch(vector<Component>& allComponent, string destPath, string fileName) {
+	ofstream destFile(destPath);
+	Information::saveInformation(destFile, fileName);
 	for (Component component : allComponent) {
 		destFile << "{\n";
 		destFile << component.name + "\n";
@@ -495,7 +561,9 @@ void Component::saveComponent_sch(vector<Component>& allComponent, ofstream& des
 		}
 		destFile << "\t]\n";
 		destFile << "}\n";
+
 	}
+	destFile.close();
 }
 
 void Component::saveComponent_net(vector<Component>& allComponent, string destPath, string filePath) {
@@ -523,42 +591,20 @@ void Component::saveComponent_net(vector<Component>& allComponent, string destPa
 	destFile << "\t)\n";
 	destFile << ")\n";
 }
-void Net::SaveNet_net(vector<Net>& allNet, string destPath,string filePath) {
-	ofstream destFile(destPath);
-	for (Net net : allNet) {
-		destFile << "(Net\n";
-		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
-		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
 
-		destFile << ")\n";
-	}
-}
-void Net::SaveNet_sch(vector<Net>& allNet, ofstream& destFile) {
-	destFile << "------\n";
-	for (Net net : allNet) {
-		destFile << "{\n";
-		destFile << "Net\n";
-		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
-		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
-
-		destFile << "}\n";
-	}
-	
-}
-
-void Net::drawNet(wxDC& dc, vector<Net>& allNet){
+void Net::drawNet(wxDC& dc, vector<Net>& allNet) {
 	for (int i = 0; i < allNet.size(); i++) {
-
-		dc.SetPen(wxPen(wxColor(0,150,0), 2));
+		dc.SetPen(wxPen(wxColor(0, 150, 0), 2));
 		int midx = (allNet[i].Px[0] + allNet[i].Px[1]) / 2;
 		dc.DrawLine(allNet[i].Px[0], allNet[i].Py[0], midx, allNet[i].Py[0]);
 		dc.DrawLine(midx, allNet[i].Py[0], midx, allNet[i].Py[1]);
 		dc.DrawLine(midx, allNet[i].Py[1], allNet[i].Px[1], allNet[i].Py[1]);
 	}
 }
+
 void Net::ReadNet(vector<Net>& allNet) {
 	string s;
-	while(s!="Px")cin >> s;
+	while (s != "Px")cin >> s;
 	int x1, x2;
 	cin >> x1 >> x2;
 	int i = allNet.size() - 1;
@@ -571,4 +617,66 @@ void Net::ReadNet(vector<Net>& allNet) {
 	allNet[i].Py.push_back(y1);
 	allNet[i].Py.push_back(y2);
 	while (s != "}")cin >> s;
+}
+
+void Net::SaveNet_sch(vector<Net>& allNet, ofstream& destFile) {
+	for (Net net : allNet) {
+		destFile << "{\n";
+		destFile << "Net\n";
+		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
+		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
+
+		destFile << "}\n";
+	}
+
+}
+
+void Net::SaveNet_net(vector<Net>& allNet, string destPath, string filePath) {
+	ofstream destFile(destPath);
+	for (Net net : allNet) {
+		destFile << "(Net\n";
+		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
+		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
+
+		destFile << ")\n";
+	}
+}
+
+void Net::readNet(vector<Net>& allNet, int flag, string filePath) {
+	if (flag == 0) {//flag为0时，把vector数组中所有数据清空，此时是执行导入文件的程序
+		allNet.clear();
+		freopen(filePath.c_str(), "r", stdin);
+	}
+	if (flag == 1) {//flag为1时,此时执行添加电气元件，因此不用清空
+		freopen(filePath.c_str(), "r", stdin);
+	}
+	cin.clear();
+	cin.seekg(0, ios::beg);
+	//freopen("F:\\MyEDAComponent\\component.txt", "r", stdin);
+	string s;
+	while (cin >> s) {
+		if (s == "{") {
+			allNet.push_back(Net());
+			allNet[allNet.size() - 1].ReadNet(allNet);
+		}
+	}
+}
+
+void Information::saveInformation(ofstream& destFile, string  fileName) {
+	infor.file = fileName;
+	if (infor.date == "") {
+		auto now = chrono::system_clock::now();
+		time_t now_time = chrono::system_clock::to_time_t(now);
+		tm* local_time = localtime(&now_time);
+		stringstream ss;
+		ss << put_time(local_time, "%Y-%m-%d %H:%M:%S");
+		infor.date = ss.str();
+	}
+	destFile << "{\n";
+	destFile << "Information\n";
+	destFile << "\tSize " << infor.size << "\n";
+	destFile << "\tDate " << infor.date << "\n";
+	destFile << "\tRev " << infor.rev << "\n";
+	destFile << "\tFile " << infor.file << "\n";
+	destFile << "}\n";
 }

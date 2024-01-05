@@ -106,24 +106,31 @@ public:
 
 public:
 	static void drawComponent(wxDC& dc, vector<Component>& allComponent);
-
+	static void drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size);
 public:
 	void readComponent(vector<Component>& allComponent);
+
 public:
-	static void saveComponent_sch(vector<Component>& allComponent, ofstream& destFile);
+	static void saveComponent_sch(vector<Component>& allComponent, string destPath, string fileName);
 public:
 	static void saveComponent_net(vector<Component>& allComponent, string destPath, string filePath);
 };
 
-class Net
-{
+class Net {
 public:
-	vector<int> Px,Py;
-    static void drawNet(wxDC& dc, vector<Net>& allNet);
+	vector<int> Px, Py;
+	static void drawNet(wxDC& dc, vector<Net>& allNet);
 	static void ReadNet(vector<Net>& allNet);
-	static void SaveNet_sch(vector<Net>& allNet,  ofstream& destFile);
-	static void SaveNet_net(vector<Net>& allNet, string destPath,string filePath);
-	static void readFile(vector<Net>& allNet, int flag, string filePath);
+	static void SaveNet_sch(vector<Net>& allNet, ofstream& destFile);
+	static void SaveNet_net(vector<Net>& allNet, string destPath, string filePath);
+	static void readNet(vector<Net>& allNet, int flag, string filePath);
 };
 
+class Information {//用来记录每个lyx文件的基本信息
+public:
+	string size = "A4", title = "", date = "", rev = "V1.0", file = "";
+public:
+	static void saveInformation(ofstream& destFile, string fileName);
+	void readInformation(vector<Component>& allComponent);
+};
 #endif

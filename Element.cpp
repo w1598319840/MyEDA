@@ -252,7 +252,6 @@ void MyRectangle::draw(wxDC& dc) {
 	else {
 		dc.SetBrush(wxColor(br, bg, bb));
 	}
-	//printf("%d %d %d %d %d %d\n",x,y,centerx,centery,x+centerx,y+centery);
 	dc.DrawRectangle(x + centerx, y + centery, width, height);
 }
 
@@ -380,19 +379,32 @@ void Component::readFile(vector<Component>& allComponent, int flag, string fileP
 	string s;
 	while (cin >> s) {
 		if (s == "{") {
-			cin >> s;
 			allComponent.push_back(Component());
-			if (s == "Information") {
-				allComponent[allComponent.size() - 1].readInformation(allComponent);
-			}
-			else {
-				allComponent[allComponent.size() - 1].name = s;
-				allComponent[allComponent.size() - 1].readComponent(allComponent);
-			}
+			cin >> allComponent[allComponent.size() - 1].name;
+			allComponent[allComponent.size() - 1].readComponent(allComponent);
+		}
+		else if (s == "------")break;
+	}
+}
+void Net::readFile(vector<Net>& allNet, int flag, string filePath) {
+	if (flag == 0) {//flag为0时，把vector数组中所有数据清空，此时是执行导入文件的程序
+		allNet.clear();
+		freopen(filePath.c_str(), "r", stdin);
+	}
+	if (flag == 1) {//flag为1时,此时执行添加电气元件，因此不用清空
+		freopen(filePath.c_str(), "r", stdin);
+	}
+	cin.clear();
+	cin.seekg(0, ios::beg);
+	//freopen("F:\\MyEDAComponent\\component.txt", "r", stdin);
+	string s;
+	while (cin >> s) {
+		if (s == "{") {
+			allNet.push_back(Net());
+			allNet[allNet.size() - 1].ReadNet(allNet);
 		}
 	}
 }
-
 void Component::drawComponent(wxDC& dc, vector<Component>& allComponent) {
 	for (int i = 0; i < allComponent.size(); i++) {
 		for (int j = 0; j < allComponent[i].vCircle.size(); j++) {
@@ -416,29 +428,9 @@ void Component::drawComponent(wxDC& dc, vector<Component>& allComponent) {
 	}
 }
 
-void Component::drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size) {
-	int width = size.GetWidth();
-	int height = size.GetHeight();
-	int	x = size.x;
-	int y = size.y;
-	dc.SetPen(wxPen(wxColor(132, 0, 0), 1));
-	dc.SetBrush(wxColor(245, 244, 239));
-	dc.DrawRectangle(0.60 * x, 0.82 * y, width - 0.60 * x, height - 0.82 * y);
-	dc.DrawLine(0.60 * x, 0.90 * y, x, 0.90 * y);
-	dc.DrawLine(0.60 * x, 0.93 * y, x, 0.93 * y);
-	dc.DrawLine(0.60 * x, 0.955 * y, x, 0.955 * y);
-	dc.DrawLine(0.60 * x, 0.973 * y, x, 0.973 * y);
-	dc.DrawLine(0.675 * x, 0.955 * y, 0.675 * x, 0.973 * y);
-	dc.DrawLine(0.906 * x, 0.955 * y, 0.906 * x, 0.973 * y);
-
-
-}
-
 void Component::readComponent(vector<Component>& allComponent) {
 	string s;
-
 	while (cin >> s) {
-
 		if (s == "[") {
 			while (s != "]") {
 				int k = allComponent.size() - 1;
@@ -486,29 +478,7 @@ void Component::readComponent(vector<Component>& allComponent) {
 	}
 }
 
-void Component::readInformation(vector<Component>& allComponent) {
-	string s;
-	while (cin >> s) {
-		if (s == "Paper") {
-			cin >> paper;
-		}
-		if (s == "Title") {
-			cin >> title;
-		}
-		if (s == "Date") {
-			cin >> date;
-		}
-		if (s == "Rev") {
-			cin >> rev;
-		}
-		if (s == "}") {
-			return;
-		}
-	}
-}
-
-void Component::saveComponent_sch(vector<Component>& allComponent, string destPath) {
-	ofstream destFile(destPath);
+void Component::saveComponent_sch(vector<Component>& allComponent, ofstream& destFile) {
 	for (Component component : allComponent) {
 		destFile << "{\n";
 		destFile << component.name + "\n";
@@ -525,9 +495,7 @@ void Component::saveComponent_sch(vector<Component>& allComponent, string destPa
 		}
 		destFile << "\t]\n";
 		destFile << "}\n";
-
 	}
-	destFile.close();
 }
 
 void Component::saveComponent_net(vector<Component>& allComponent, string destPath, string filePath) {
@@ -555,14 +523,52 @@ void Component::saveComponent_net(vector<Component>& allComponent, string destPa
 	destFile << "\t)\n";
 	destFile << ")\n";
 }
+void Net::SaveNet_net(vector<Net>& allNet, string destPath,string filePath) {
+	ofstream destFile(destPath);
+	for (Net net : allNet) {
+		destFile << "(Net\n";
+		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
+		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
 
-void Net::drawNet(wxDC& dc, vector<Net>& allNet) {
+		destFile << ")\n";
+	}
+}
+void Net::SaveNet_sch(vector<Net>& allNet, ofstream& destFile) {
+	destFile << "------\n";
+	for (Net net : allNet) {
+		destFile << "{\n";
+		destFile << "Net\n";
+		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
+		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
+
+		destFile << "}\n";
+	}
+	
+}
+
+void Net::drawNet(wxDC& dc, vector<Net>& allNet){
 	for (int i = 0; i < allNet.size(); i++) {
 
-		dc.SetPen(wxPen(wxColor(0, 150, 0), 2));
+		dc.SetPen(wxPen(wxColor(0,150,0), 2));
 		int midx = (allNet[i].Px[0] + allNet[i].Px[1]) / 2;
 		dc.DrawLine(allNet[i].Px[0], allNet[i].Py[0], midx, allNet[i].Py[0]);
 		dc.DrawLine(midx, allNet[i].Py[0], midx, allNet[i].Py[1]);
 		dc.DrawLine(midx, allNet[i].Py[1], allNet[i].Px[1], allNet[i].Py[1]);
 	}
+}
+void Net::ReadNet(vector<Net>& allNet) {
+	string s;
+	while(s!="Px")cin >> s;
+	int x1, x2;
+	cin >> x1 >> x2;
+	int i = allNet.size() - 1;
+	allNet[i].Px.push_back(x1);
+	allNet[i].Px.push_back(x2);
+
+	while (s != "Py")cin >> s;
+	int y1, y2;
+	cin >> y1 >> y2;
+	allNet[i].Py.push_back(y1);
+	allNet[i].Py.push_back(y2);
+	while (s != "}")cin >> s;
 }

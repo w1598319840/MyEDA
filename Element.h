@@ -91,7 +91,7 @@ public:
 
 class Component {
 public:
-	string name, paper, title, date = "", rev;
+	string name;
 	int centerX;
 	int centerY;
 	vector<MyCircle> vCircle;
@@ -106,12 +106,11 @@ public:
 
 public:
 	static void drawComponent(wxDC& dc, vector<Component>& allComponent);
-	static void drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size);
+
 public:
 	void readComponent(vector<Component>& allComponent);
-	void readInformation(vector<Component>& allComponent);
 public:
-	static void saveComponent_sch(vector<Component>& allComponent, string destPath);
+	static void saveComponent_sch(vector<Component>& allComponent, ofstream& destFile);
 public:
 	static void saveComponent_net(vector<Component>& allComponent, string destPath, string filePath);
 };
@@ -119,8 +118,12 @@ public:
 class Net
 {
 public:
-	vector<int> Px, Py;
-	static void drawNet(wxDC& dc, vector<Net>& allNet);
+	vector<int> Px,Py;
+    static void drawNet(wxDC& dc, vector<Net>& allNet);
+	static void ReadNet(vector<Net>& allNet);
+	static void SaveNet_sch(vector<Net>& allNet,  ofstream& destFile);
+	static void SaveNet_net(vector<Net>& allNet, string destPath,string filePath);
+	static void readFile(vector<Net>& allNet, int flag, string filePath);
 };
 
 #endif

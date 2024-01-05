@@ -18,10 +18,12 @@ public:
 	bool isConnecting;
 	bool isDrawing;
 
+	void MyRefresh();
 	void OnPaint(wxPaintEvent& event);
 	void OnMouseMove(wxMouseEvent& event);
 	void Drag(wxMouseEvent& event);
-	void Connect(wxCommandEvent& event);
+	void OnConnect(wxCommandEvent& event);
+	void Connect(wxMouseEvent& event);
 	void OnMouseLeftDown(wxMouseEvent& event);
 	void OnMouseLeftUp(wxMouseEvent& event);
 	void OnMouseDoubleClick(wxMouseEvent& event);

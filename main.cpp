@@ -11,6 +11,7 @@
 
 using namespace std;
 vector<Component> allComponent;
+vector<Net>allNet;
 
 class App : public wxApp {
 public:

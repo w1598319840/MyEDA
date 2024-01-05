@@ -510,3 +510,14 @@ void Component::saveComponent_net(vector<Component>& allComponent, string destPa
 	destFile << "\t)\n";
 	destFile << ")\n";
 }
+
+void Net::drawNet(wxDC& dc, vector<Net>& allNet){
+	for (int i = 0; i < allNet.size(); i++) {
+
+		dc.SetPen(wxPen(wxColor(0,150,0), 2));
+		int midx = (allNet[i].Px[0] + allNet[i].Px[1]) / 2;
+		dc.DrawLine(allNet[i].Px[0], allNet[i].Py[0], midx, allNet[i].Py[0]);
+		dc.DrawLine(midx, allNet[i].Py[0], midx, allNet[i].Py[1]);
+		dc.DrawLine(midx, allNet[i].Py[1], allNet[i].Px[1], allNet[i].Py[1]);
+	}
+}

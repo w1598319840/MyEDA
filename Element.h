@@ -115,4 +115,11 @@ public:
 	static void saveComponent_net(vector<Component>& allComponent, string destPath, string filePath);
 };
 
+class Net
+{
+public:
+	vector<int> Px,Py;
+	static void drawNet(wxDC& dc, vector<Net>& allNet);
+};
+
 #endif

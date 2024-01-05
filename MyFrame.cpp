@@ -3,8 +3,13 @@
 #include <wx/wx.h>
 #include <ctime>
 #define SAVE_NET 5023
+extern std::vector<Net> allNet;
 
 MyPanel::MyPanel(wxFrame* parent) : wxPanel(parent) {
+	ConnectButton = new wxButton(this, wxID_ANY, wxT("连线"));
+
+	// 绑定按钮点击事件处理函数
+	ConnectButton->Bind(wxEVT_BUTTON, &MyPanel::Connect, this);
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
 	Bind(wxEVT_MOTION, &MyPanel::OnMouseMove, this);
 	Bind(wxEVT_LEFT_DOWN, &MyPanel::OnMouseLeftDown, this);
@@ -12,62 +17,83 @@ MyPanel::MyPanel(wxFrame* parent) : wxPanel(parent) {
 	Bind(wxEVT_LEFT_DCLICK, &MyPanel::OnMouseDoubleClick, this);
 
 }
+void MyPanel::Connect(wxCommandEvent& event) {
+	isConnecting = true;
+}
+void MyPanel::Drag(wxMouseEvent& event){
+	if (cur == -1)return;
+
+	// 计算鼠标移动的距离
+	int disX = event.GetPosition().x - originalX;
+	int disY = event.GetPosition().y - originalY;
+	//disX /= 10; disY /= 10;
+	allComponent[cur].centerX += disX;
+	allComponent[cur].centerY += disY;
+	originalX += disX;
+	originalY += disY;
+	for (int i = 0; i < allComponent[cur].vLine.size(); i++) {
+		allComponent[cur].vLine[i].centerx += disX;
+		allComponent[cur].vLine[i].centery += disY;
+	}
+	for (int i = 0; i < allComponent[cur].vRectangle.size(); i++) {
+		allComponent[cur].vRectangle[i].centerx += disX;
+		allComponent[cur].vRectangle[i].centery += disY;
+	}
+	for (int i = 0; i < allComponent[cur].vCircle.size(); i++) {
+		allComponent[cur].vCircle[i].centerx += disX;
+		allComponent[cur].vCircle[i].centery += disY;
+	}
+	for (int i = 0; i < allComponent[cur].vCurve.size(); i++) {
+		allComponent[cur].vCurve[i].centerx += disX;
+		allComponent[cur].vCurve[i].centery += disY;
+	}
+	for (int i = 0; i < allComponent[cur].vText.size(); i++) {
+		allComponent[cur].vText[i].centerx += disX;
+		allComponent[cur].vText[i].centery += disY;
+	}
+	//cout << cur << " " << allComponent[cur].vLine[0].x1 << " " << allComponent[cur].vLine[0].y1 << endl;
+	b = clock();
+	if (b - a > 1000 / 60)Refresh(), a = clock();
+}
+
 
 void MyPanel::OnMouseMove(wxMouseEvent& event) {
 	if (isDragging) {
-		if (cur == -1)return;
-
-		// 计算鼠标移动的距离
-		int disX = event.GetPosition().x - originalX;
-		int disY = event.GetPosition().y - originalY;
-		//disX /= 10; disY /= 10;
-		allComponent[cur].centerX += disX;
-		allComponent[cur].centerY += disY;
-		originalX += disX;
-		originalY += disY;
-		for (int i = 0; i < allComponent[cur].vLine.size(); i++) {
-			allComponent[cur].vLine[i].centerx += disX;
-			allComponent[cur].vLine[i].centery += disY;
-		}
-		for (int i = 0; i < allComponent[cur].vRectangle.size(); i++) {
-			allComponent[cur].vRectangle[i].centerx += disX;
-			allComponent[cur].vRectangle[i].centery += disY;
-		}
-		for (int i = 0; i < allComponent[cur].vCircle.size(); i++) {
-			allComponent[cur].vCircle[i].centerx += disX;
-			allComponent[cur].vCircle[i].centery += disY;
-		}
-		for (int i = 0; i < allComponent[cur].vCurve.size(); i++) {
-			allComponent[cur].vCurve[i].centerx += disX;
-			allComponent[cur].vCurve[i].centery += disY;
-		}
-		for (int i = 0; i < allComponent[cur].vText.size(); i++) {
-			allComponent[cur].vText[i].centerx += disX;
-			allComponent[cur].vText[i].centery += disY;
-		}
-		//cout << cur << " " << allComponent[cur].vLine[0].x1 << " " << allComponent[cur].vLine[0].y1 << endl;
-		b = clock();
-		if (b - a > 1000 / 60)Refresh(), a = clock();
+		Drag(event);
 	}
-
+	if (isConnecting) {
+		;
+	}
 	event.Skip();
 }
 
 void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
-	// 标记开始拖动，并记录初始鼠标位置
-	isDragging = true;
-	a = clock();
 	int temX = event.GetPosition().x;
 	int temY = event.GetPosition().y;
+	// 如果处于画线阶段
+	if (isConnecting == 1) {
+		if (isDrawing == 0) {
+			allNet.push_back(Net());
+			isDrawing = 1;
+		}
+		else isDrawing = 0;
+		int nw = allNet.size() - 1;
+		allNet[nw].Px.push_back(temX);
+		allNet[nw].Py.push_back(temY);
+		return;
+	}
+	// 标记开始拖动，并记录初始鼠标位置
 	for (int i = 0; i < allComponent.size(); i++)
 	{
 		int dist = (allComponent[i].centerX - temX) * (allComponent[i].centerX - temX) + (allComponent[i].centerY - temY) * (allComponent[i].centerY - temY);
 		cout << dist << endl;
 		if (dist <= 2000)
 		{
+			a = clock();
 			cur = i;
 			originalX = allComponent[i].centerX;
 			originalY = allComponent[i].centerY;
+			isDragging = true;
 			return;
 		}
 	}
@@ -76,7 +102,11 @@ void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
 void MyPanel::OnMouseLeftUp(wxMouseEvent& event) {
 	// 停止拖动
-	isDragging = false;
+	if (isConnecting == 1) {
+		if (isDrawing == 1)return;
+		isConnecting = 0;
+	}
+	else isDragging = false;
 	Refresh();
 }
 
@@ -105,11 +135,9 @@ void MyPanel::OnMouseDoubleClick(wxMouseEvent& event)
 
 void MyPanel::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this);
-	//dc.SetBackground(*wxWHITE_BRUSH);
-
 	/* 开始绘图 */
 	Component::drawComponent(dc, allComponent);
-	//dc.Blit(0, 0, GetClientSize().GetWidth(), GetClientSize().GetHeight(), &memDC, 0, 0);
+	Net::drawNet(dc, allNet);
 }
 
 MyFrame::MyFrame(const wxString& title, const wxSize& size) :wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, size)
@@ -150,15 +178,14 @@ void MyFrame::OnNew(wxCommandEvent& event) {
 void MyFrame::OnOpen(wxCommandEvent& event) {
 	wxFileDialog openFileDialog(this, "路径选择", "", "", ".lyx文件 (*.lyx)|*.lyx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (openFileDialog.ShowModal() == wxID_OK) {
-		filePath = openFileDialog.GetPath();
-		Component::readFile(allComponent, 0, filePath);//调用静态函数
+		destPath = openFileDialog.GetPath();
+		Component::readFile(allComponent, 0, destPath);//调用静态函数
 		myPanel->Refresh();
 	}
 
 }
 
 void MyFrame::OnSave_sch(wxCommandEvent& event) {
-	string destPath;
 	wxFileDialog saveFileDialog(this, "路径选择", "", "", ".lyx文件 (*.lyx)|*.lyx", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_OK) {
 		destPath = saveFileDialog.GetPath();
@@ -167,7 +194,7 @@ void MyFrame::OnSave_sch(wxCommandEvent& event) {
 }
 
 void MyFrame::OnSave_net(wxCommandEvent& event) {
-	if (filePath == "") {
+	if (destPath == "") {
 		wxMessageBox("需要先保存文件为原理图!");
 		return;
 	}
@@ -175,7 +202,7 @@ void MyFrame::OnSave_net(wxCommandEvent& event) {
 	wxFileDialog saveFileDialog(this, "路径选择", "", "", ".net文件 (*.net)|*.net", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_OK) {
 		destPath = saveFileDialog.GetPath();
-		Component::saveComponent_net(allComponent, destPath, filePath);
+		Component::saveComponent_net(allComponent, destPath, destPath);
 	}
 }
 

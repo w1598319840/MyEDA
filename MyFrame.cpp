@@ -67,9 +67,6 @@ void MyPanel::OnMouseMove(wxMouseEvent& event) {
 }
 
 void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
-	// 标记开始拖动，并记录初始鼠标位置
-	isDragging = true;
-	a = clock();
 	int temX = event.GetPosition().x;
 	int temY = event.GetPosition().y;
 	// 如果处于画线阶段
@@ -104,7 +101,6 @@ void MyPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
 void MyPanel::OnMouseLeftUp(wxMouseEvent& event) {
 	// 停止拖动
-	isDragging = false;
 	if (isConnecting == 1) {
 		if (isDrawing == 1)return;
 		isConnecting = 0;

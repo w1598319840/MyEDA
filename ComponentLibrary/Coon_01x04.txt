@@ -94,7 +94,7 @@ Coon_01x04
 		textSize 12
 		x -90
 		y -53
-		content   无源
+		content  无源
 		degree 0
 		)
 	Text

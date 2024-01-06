@@ -200,6 +200,8 @@ void MyFrame::addComponent(wxCommandEvent& event) {
 
 void MyFrame::OnNew(wxCommandEvent& event) {
 	allComponent.clear();
+	allNet.clear();
+	Information infor;
 	OnSave_sch(event);
 	myPanel->Refresh();
 }

@@ -21,6 +21,11 @@ public:
 	static void addCapacitor(vector<Component>& allComponent, string filePath);
 };
 
+class Transistor {
+public:
+	static void addTransistor(vector<Component>& allComponent, string filePath);
+};
+
 class ComponentSelectionPanel;
 
 class ComponentSelection : public wxFrame {
@@ -37,6 +42,8 @@ public:
 	void resistanceView(wxCommandEvent& event);
 	void capacitorClick(wxCommandEvent& event);
 	void capacitorView(wxCommandEvent& event);
+	void transistorClick(wxCommandEvent& event);
+	void transistorView(wxCommandEvent& event);
 };
 
 class ComponentSelectionPanel : public wxPanel {

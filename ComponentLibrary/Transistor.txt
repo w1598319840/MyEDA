@@ -1,0 +1,69 @@
+{
+Transistor
+	[
+   	Center 650 100
+   	Line
+        	(
+        	lineColor 132 0 0 
+        	lineWidth 2
+       	 	x1 30
+      		y1 0
+        	x2 -20
+        	y2 40
+        	)
+    	Line
+        	(
+        	lineColor 132 0 0 
+        	lineWidth 2
+        	x1 -20
+        	y1 40
+        	x2 -20
+        	y2 -40
+        	)
+    	Line
+        	(
+        	lineColor 132 0 0 
+        	lineWidth 2
+        	x1 -20
+        	y1 -40
+        	x2 30
+        	y2 0
+        	)
+    	Line
+        	(
+        	lineColor 132 0 0 
+        	lineWidth 2
+        	x1 30
+        	y1 0
+        	x2 80
+        	y2 0
+        	)
+    	Line
+        	(
+        	lineColor 132 0 0 
+        	lineWidth 2
+        	x1 -20
+        	y1 00
+        	x2 -70
+        	y2 00
+        	)
+    	Text
+        	(
+        	textColor 0 100 100
+        	textSize 20
+        	x -10
+        	y -10
+        	content T
+        	degree 0
+        	)
+    	Text
+        	(
+        	textColor 72 72 255
+        	textSize 15
+        	x -115
+        	y -10
+        	content ÓÐÔ´
+        	degree 0  
+        	)
+    	]
+}

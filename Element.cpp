@@ -8,7 +8,7 @@ extern vector<Net> allNet;
 void MyText::draw(wxDC& dc) {
 	dc.SetFont(wxFont(textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 	dc.SetTextForeground(wxColour(tr, tg, tb));
-	if (content != "无源") {
+	if (content != "无源" && content != "有源") {
 		dc.DrawRotatedText(content, x + centerx, y + centery, degree);
 	}
 }
@@ -371,6 +371,8 @@ void MyCurve::readCurve(int centerX, int centerY) {
 void Component::readFile(vector<Component>& allComponent, int flag, string filePath) {
 	if (flag == 0) {//flag为0时，把vector数组中所有数据清空，此时是执行导入文件的程序
 		allComponent.clear();
+		allNet.clear();
+		Information infor;
 		freopen(filePath.c_str(), "r", stdin);
 	}
 	if (flag == 1) {//flag为1时,此时执行添加电气元件，因此不用清空

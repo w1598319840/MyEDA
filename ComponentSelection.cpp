@@ -28,6 +28,12 @@ void Capacitor::addCapacitor(vector<Component>& allComponent, string filePath) {
 	Component::readFile(allComponent, 1, filePath);
 }
 
+void Transistor::addTransistor(vector<Component>& allComponent, string filePath) {
+	string str = "\\Transistor.txt";
+	filePath = filePath + str;
+	Component::readFile(allComponent, 1, filePath);
+}
+
 ComponentSelection::ComponentSelection(const wxString& title, const wxSize& size, MyPanel* myPanel) : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, size) {
 	this->myPanel = myPanel;
 	char cwd[256];
@@ -46,6 +52,8 @@ ComponentSelection::ComponentSelection(const wxString& title, const wxSize& size
 	wxButton* Resistance_view = new wxButton(componentSelectionPanel, wxID_ANY, "浏览", wxPoint(460, 70), wxSize(50, 20));
 	wxButton* Capacitor_Button = new wxButton(componentSelectionPanel, wxID_ANY, "Capacitor", wxPoint(10, 90), wxSize(450, 20));
 	wxButton* Capacitor_view = new wxButton(componentSelectionPanel, wxID_ANY, "浏览", wxPoint(460, 90), wxSize(50, 20));
+	wxButton* Transistor_Button = new wxButton(componentSelectionPanel, wxID_ANY, "Transistor", wxPoint(10, 110), wxSize(450, 20));
+	wxButton* Transistor_view = new wxButton(componentSelectionPanel, wxID_ANY, "浏览", wxPoint(460, 110), wxSize(50, 20));
 
 	Coon_01x04_Button->Bind(wxEVT_BUTTON, &ComponentSelection::coon_01x04Click, this);
 	Coon_01x04_view->Bind(wxEVT_BUTTON, &ComponentSelection::coon_01x04View, this);
@@ -53,6 +61,8 @@ ComponentSelection::ComponentSelection(const wxString& title, const wxSize& size
 	Resistance_view->Bind(wxEVT_BUTTON, &ComponentSelection::resistanceView, this);
 	Capacitor_Button->Bind(wxEVT_BUTTON, &ComponentSelection::capacitorClick, this);
 	Capacitor_view->Bind(wxEVT_BUTTON, &ComponentSelection::capacitorView, this);
+	Transistor_Button->Bind(wxEVT_BUTTON, &ComponentSelection::transistorClick, this);
+	Transistor_view->Bind(wxEVT_BUTTON, &ComponentSelection::transistorView, this);
 
 	Show();
 }
@@ -92,6 +102,18 @@ void ComponentSelection::capacitorClick(wxCommandEvent& event) {
 void ComponentSelection::capacitorView(wxCommandEvent& event) {
 	preview.clear();
 	Capacitor::addCapacitor(preview, filePath);
+	componentSelectionPanel->Refresh();
+}
+
+void ComponentSelection::transistorClick(wxCommandEvent& event) {
+	Transistor::addTransistor(allComponent, filePath);
+	myPanel->Refresh();
+	Close();
+}
+
+void ComponentSelection::transistorView(wxCommandEvent& event) {
+	preview.clear();
+	Transistor::addTransistor(preview, filePath);
 	componentSelectionPanel->Refresh();
 }
 

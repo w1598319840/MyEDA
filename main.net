@@ -1,0 +1,50 @@
+(export (version "E")
+	(design
+		(source "D:\VisualCode\VSitems\MYCAD\MYCAD\main.net")
+		(date "2024-01-06 17:32:49")
+		(tool "LYXCAD 1.0.0")
+		(sheet (number "1") (name " / ") (tstamps " / "))
+	)
+	(components
+		(comp (ref "Coon_01x04")
+			(value "Coon_01x04")
+			(footprint "UserLib:Coon_01x04")
+		)
+		(comp (ref "Resistance")
+			(value "Resistance")
+			(footprint "UserLib:Resistance")
+		)
+		(comp (ref "Capacitor")
+			(value "Capacitor")
+			(footprint "UserLib:Capacitor")
+		)
+		(comp (ref "Transistor")
+			(value "Transistor")
+			(footprint "UserLib:Transistor")
+		)
+		(comp (ref "Resistance")
+			(value "Resistance")
+			(footprint "UserLib:Resistance")
+		)
+	)
+)
+(Net (code"1") (name "NULL")
+	Px 773 683
+	Py 289 211
+)
+(Net (code"2") (name "NULL")
+	Px 684 684
+	Py 351 413
+)
+(Net (code"3") (name "NULL")
+	Px 686 531
+	Py 543 543
+)
+(Net (code"4") (name "NULL")
+	Px 772 730
+	Py 380 618
+)
+(Net (code"5") (name "NULL")
+	Px 646 646
+	Py 68 67
+)

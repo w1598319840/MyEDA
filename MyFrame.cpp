@@ -164,7 +164,7 @@ void MyPanel::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this);
 
 	wxSize size = GetClientSize();
-	Component::drawInformation(dc, allComponent, size);
+	Information::drawInformation(dc, allComponent, size);
 	Component::drawComponent(dc, allComponent);
 	Net::drawNet(dc, allNet);
 }

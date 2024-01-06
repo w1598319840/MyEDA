@@ -106,7 +106,6 @@ public:
 
 public:
 	static void drawComponent(wxDC& dc, vector<Component>& allComponent);
-	static void drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size);
 public:
 	void readComponent(vector<Component>& allComponent);
 
@@ -130,6 +129,7 @@ class Information {//用来记录每个lyx文件的基本信息
 public:
 	string size = "A4", title = "", date = "", rev = "V1.0", file = "";
 public:
+	static void drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size);
 	static void saveInformation(ofstream& destFile, string fileName);
 	void readInformation(vector<Component>& allComponent);
 };

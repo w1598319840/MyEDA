@@ -424,7 +424,7 @@ void Component::drawComponent(wxDC& dc, vector<Component>& allComponent) {
 	}
 }
 
-void Component::drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size) {
+void Information::drawInformation(wxDC& dc, vector<Component>& allComponent, wxSize size) {
 	int width = size.GetWidth();
 	int height = size.GetHeight();
 	int	x = size.x;

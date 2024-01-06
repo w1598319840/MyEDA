@@ -1,7 +1,7 @@
 {
 Capacitor
 	[
-	Center 550 225
+	Center 650 100
 	Line
 		(
 		lineColor 132 0 0 

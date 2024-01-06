@@ -1,7 +1,7 @@
 {
 Coon_01x04
 	[
-	Center 415 260
+	Center 650 100
 	Rectangle
 		(
 		penColor 132 0 0
@@ -94,7 +94,7 @@ Coon_01x04
 		textSize 12
 		x -90
 		y -53
-		content 无源
+		content   无源
 		degree 0
 		)
 	Text
@@ -103,7 +103,7 @@ Coon_01x04
 		textSize 12
 		x -90
 		y -23
-		content 无源
+		content   无源
 		degree 0
 		)
 	Text
@@ -112,7 +112,7 @@ Coon_01x04
 		textSize 12
 		x -90
 		y 7
-		content 无源
+		content   无源
 		degree 0
 		)
 	Text
@@ -121,7 +121,7 @@ Coon_01x04
 		textSize 12
 		x -90
 		y 37
-		content 无源
+		content   无源
 		degree 0
 		)
 	Text

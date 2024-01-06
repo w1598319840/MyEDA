@@ -387,7 +387,7 @@ void Component::readFile(vector<Component>& allComponent, int flag, string fileP
 				infor.readInformation(allComponent);
 			}
 			else if (s == "Net") {
-				Net::readNet(allNet, 0, filePath);
+				Net::readAllNet(allNet, 0, filePath);
 			}
 			else {
 				allComponent.push_back(Component());
@@ -518,33 +518,8 @@ void Component::readComponent(vector<Component>& allComponent) {
 	}
 }
 
-void Information::readInformation(vector<Component>& allComponent) {
-	string s;
-	while (cin >> s) {
-		if (s == "Size") {
-			cin >> infor.size;
-		}
-		if (s == "Title") {
-			cin >> infor.title;
-		}
-		if (s == "Date") {
-			cin >> infor.date;
-		}
-		if (s == "Rev") {
-			cin >> infor.rev;
-		}
-		if (s == "File") {
-			cin >> infor.file;
-		}
-		if (s == "}") {
-			return;
-		}
-	}
-}
+void Component::saveComponent_sch(vector<Component>& allComponent, ofstream& destFile) {
 
-void Component::saveComponent_sch(vector<Component>& allComponent, string destPath, string fileName) {
-	ofstream destFile(destPath);
-	Information::saveInformation(destFile, fileName);
 	for (Component component : allComponent) {
 		destFile << "{\n";
 		destFile << component.name + "\n";
@@ -561,13 +536,11 @@ void Component::saveComponent_sch(vector<Component>& allComponent, string destPa
 		}
 		destFile << "\t]\n";
 		destFile << "}\n";
-
 	}
-	destFile.close();
+
 }
 
-void Component::saveComponent_net(vector<Component>& allComponent, string destPath, string filePath) {
-	ofstream destFile(destPath);
+void Component::saveComponent_net(vector<Component>& allComponent, ofstream& destFile, string filePath) {
 	destFile << "(export (version \"E\")\n";
 	destFile << "\t(design\n";
 	destFile << "\t\t(source " << "\"" << filePath << "\")\n";
@@ -602,7 +575,7 @@ void Net::drawNet(wxDC& dc, vector<Net>& allNet) {
 	}
 }
 
-void Net::ReadNet(vector<Net>& allNet) {
+void Net::readNet(vector<Net>& allNet) {
 	string s;
 	while (s != "Px")cin >> s;
 	int x1, x2;
@@ -616,48 +589,65 @@ void Net::ReadNet(vector<Net>& allNet) {
 	cin >> y1 >> y2;
 	allNet[i].Py.push_back(y1);
 	allNet[i].Py.push_back(y2);
-	while (s != "}")cin >> s;
+	while (s != "]")cin >> s;
 }
 
-void Net::SaveNet_sch(vector<Net>& allNet, ofstream& destFile) {
+void Net::saveNet_sch(vector<Net>& allNet, ofstream& destFile) {
+	destFile << "{\n";
+	destFile << "Net\n";
 	for (Net net : allNet) {
-		destFile << "{\n";
-		destFile << "Net\n";
-		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
-		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
-
-		destFile << "}\n";
+		destFile << "\t[\n";
+		destFile << "\t\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
+		destFile << "\t\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
+		destFile << "\t]\n";
 	}
-
+	destFile << "}\n";
 }
 
-void Net::SaveNet_net(vector<Net>& allNet, string destPath, string filePath) {
-	ofstream destFile(destPath);
+void Net::saveNet_net(vector<Net>& allNet, ofstream& destFile) {
+	int code = 0;//用来记录每条线的编号
 	for (Net net : allNet) {
-		destFile << "(Net\n";
+		code++;
+		destFile << "(Net (code\"" << code << "\") (name \"NULL\")\n";
 		destFile << "\tPx " << net.Px[0] << " " << net.Px[1] << "\n";
 		destFile << "\tPy " << net.Py[0] << " " << net.Py[1] << "\n";
-
 		destFile << ")\n";
 	}
 }
 
-void Net::readNet(vector<Net>& allNet, int flag, string filePath) {
-	if (flag == 0) {//flag为0时，把vector数组中所有数据清空，此时是执行导入文件的程序
-		allNet.clear();
-		freopen(filePath.c_str(), "r", stdin);
-	}
-	if (flag == 1) {//flag为1时,此时执行添加电气元件，因此不用清空
-		freopen(filePath.c_str(), "r", stdin);
-	}
-	cin.clear();
-	cin.seekg(0, ios::beg);
-	//freopen("F:\\MyEDAComponent\\component.txt", "r", stdin);
+void Net::readAllNet(vector<Net>& allNet, int flag, string filePath) {
 	string s;
 	while (cin >> s) {
-		if (s == "{") {
+		if (s == "[") {
 			allNet.push_back(Net());
-			allNet[allNet.size() - 1].ReadNet(allNet);
+			allNet[allNet.size() - 1].readNet(allNet);
+		}
+		if (s == "}") {
+			return;
+		}
+	}
+}
+
+void Information::readInformation(vector<Component>& allComponent) {
+	string s;
+	while (cin >> s) {
+		if (s == "Size") {
+			cin >> infor.size;
+		}
+		if (s == "Title") {
+			cin >> infor.title;
+		}
+		if (s == "Date") {
+			cin >> infor.date;
+		}
+		if (s == "Rev") {
+			cin >> infor.rev;
+		}
+		if (s == "File") {
+			cin >> infor.file;
+		}
+		if (s == "}") {
+			return;
 		}
 	}
 }

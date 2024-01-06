@@ -8,7 +8,7 @@ extern std::vector<Net> allNet;
 MyPanel::MyPanel(wxFrame* parent) : wxPanel(parent) {
 	ConnectButton = new wxButton(this, wxID_ANY, wxT("连线"));
 
-	ConnectButton->Bind(wxEVT_BUTTON, &MyPanel::Connect, this);
+	ConnectButton->Bind(wxEVT_BUTTON, &MyPanel::OnConnect, this);
 	Bind(wxEVT_PAINT, &MyPanel::OnPaint, this);
 	Bind(wxEVT_MOTION, &MyPanel::OnMouseMove, this);
 	Bind(wxEVT_LEFT_DOWN, &MyPanel::OnMouseLeftDown, this);
@@ -211,7 +211,6 @@ void MyFrame::OnOpen(wxCommandEvent& event) {
 		Component::readFile(allComponent, 0, destPath);//调用静态函数
 		myPanel->Refresh();
 	}
-
 }
 
 void MyFrame::OnSave_sch(wxCommandEvent& event) {
@@ -220,7 +219,11 @@ void MyFrame::OnSave_sch(wxCommandEvent& event) {
 		destPath = saveFileDialog.GetPath();
 		string fileName;
 		fileName = saveFileDialog.GetFilename();
-		Component::saveComponent_sch(allComponent, destPath, fileName);
+		ofstream destFile(destPath);
+		Information::saveInformation(destFile, fileName);
+		Component::saveComponent_sch(allComponent, destFile);
+		Net::saveNet_sch(allNet, destFile);
+		destFile.close();
 	}
 }
 
@@ -233,7 +236,10 @@ void MyFrame::OnSave_net(wxCommandEvent& event) {
 	wxFileDialog saveFileDialog(this, "路径选择", "", "", ".net文件 (*.net)|*.net", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_OK) {
 		destPath = saveFileDialog.GetPath();
-		Component::saveComponent_net(allComponent, destPath, destPath);
+		ofstream destFile(destPath);
+		Component::saveComponent_net(allComponent, destFile, destPath);
+		Net::saveNet_net(allNet, destFile);
+		destFile.close();
 	}
 }
 

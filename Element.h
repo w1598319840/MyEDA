@@ -111,19 +111,19 @@ public:
 	void readComponent(vector<Component>& allComponent);
 
 public:
-	static void saveComponent_sch(vector<Component>& allComponent, string destPath, string fileName);
+	static void saveComponent_sch(vector<Component>& allComponent, ofstream& destFile);
 public:
-	static void saveComponent_net(vector<Component>& allComponent, string destPath, string filePath);
+	static void saveComponent_net(vector<Component>& allComponent, ofstream& destFile, string filePath);
 };
 
 class Net {
 public:
 	vector<int> Px, Py;
 	static void drawNet(wxDC& dc, vector<Net>& allNet);
-	static void ReadNet(vector<Net>& allNet);
-	static void SaveNet_sch(vector<Net>& allNet, ofstream& destFile);
-	static void SaveNet_net(vector<Net>& allNet, string destPath, string filePath);
-	static void readNet(vector<Net>& allNet, int flag, string filePath);
+	static void readNet(vector<Net>& allNet);
+	static void saveNet_sch(vector<Net>& allNet, ofstream& destFile);
+	static void saveNet_net(vector<Net>& allNet, ofstream& destFile);
+	static void readAllNet(vector<Net>& allNet, int flag, string filePath);
 };
 
 class Information {//用来记录每个lyx文件的基本信息

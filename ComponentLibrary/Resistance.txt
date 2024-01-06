@@ -1,7 +1,7 @@
 {
 Resistance             
 	[
-        Center 215 200
+        Center 650 100
 	Rectangle
 		(
 		penColor 132 0 0

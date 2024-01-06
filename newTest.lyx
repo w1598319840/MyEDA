@@ -1,0 +1,408 @@
+{
+Information
+	Size A4
+	Date 2024-01-05
+	Rev V1.0
+	File newTest.lyx
+}
+{
+Resistance
+	[
+	Center 651 304
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 3
+		brushColor -1 -1 -1
+		x -15
+		y -50
+		width 30
+		height 100
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 0
+		y1 -50
+		x2 0
+		y2 -70
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 0
+		y1 50
+		x2 0
+		y2 70
+		)
+	Text
+		(
+		textColor 0 100 100
+		textSize 20
+		x -15
+		y 5
+		content R
+		degree 90
+		)
+	Text
+		(
+		textColor 0 100 100
+		textSize 20
+		x -15
+		y 5
+		content R
+		degree 90
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 15
+		x -10
+		y -70
+		content 无源
+		degree 90
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 15
+		x -10
+		y 120
+		content 无源
+		degree 90
+		)
+	]
+}
+{
+Coon_01x04
+	[
+	Center 518 360
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y -60
+		width 30
+		height 120
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y -47
+		width 15
+		height 5
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y -17
+		width 15
+		height 5
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y 13
+		width 15
+		height 5
+		)
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 2
+		brushColor 255 255 194
+		x -15
+		y 43
+		width 15
+		height 5
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 -55
+		y1 -45
+		x2 15
+		y2 -45
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 -55
+		y1 -15
+		x2 -15
+		y2 -15
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 -55
+		y1 15
+		x2 -15
+		y2 15
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 -55
+		y1 45
+		x2 -15
+		y2 45
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y -53
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y -23
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y 7
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 12
+		x -90
+		y 37
+		content 无源
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y -65
+		content 1
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y -35
+		content 2
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y -5
+		content 3
+		degree 0
+		)
+	Text
+		(
+		textColor 169 0 0
+		textSize 14
+		x -40
+		y 25
+		content 4
+		degree 0
+		)
+	Text
+		(
+		textColor 2 101 101
+		textSize 15
+		x -5
+		y -85
+		content J
+		degree 0
+		)
+	Text
+		(
+		textColor 2 101 101
+		textSize 14
+		x -55
+		y 62
+		content Coon_01x04
+		degree 0
+		)
+	]
+}
+{
+Resistance
+	[
+	Center 879 399
+	Rectangle
+		(
+		penColor 132 0 0
+		penWidth 3
+		brushColor -1 -1 -1
+		x -15
+		y -50
+		width 30
+		height 100
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 0
+		y1 -50
+		x2 0
+		y2 -70
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 0
+		y1 50
+		x2 0
+		y2 70
+		)
+	Text
+		(
+		textColor 0 100 100
+		textSize 20
+		x -15
+		y 5
+		content R
+		degree 90
+		)
+	Text
+		(
+		textColor 0 100 100
+		textSize 20
+		x -15
+		y 5
+		content R
+		degree 90
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 15
+		x -10
+		y -70
+		content 无源
+		degree 90
+		)
+	Text
+		(
+		textColor 72 72 255
+		textSize 15
+		x -10
+		y 120
+		content 无源
+		degree 90
+		)
+	]
+}
+{
+Capacitor
+	[
+	Center 576 476
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 7
+		x1 -50
+		y1 -25
+		x2 50
+		y2 -25
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 7
+		x1 -50
+		y1 25
+		x2 50
+		y2 25
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 0
+		y1 -25
+		x2 0
+		y2 -65
+		)
+	Line
+		(
+		lineColor 132 0 0
+		lineWidth 2
+		x1 0
+		y1 25
+		x2 0
+		y2 65
+		)
+	Text
+		(
+		textColor 2 101 101
+		textSize 20
+		x 5
+		y -55
+		content C
+		degree 0
+		)
+	Text
+		(
+		textColor 2 101 101
+		textSize 20
+		x 5
+		y 40
+		content C
+		degree 0
+		)
+	]
+}
+{
+Net
+	[
+		Px 174 532
+		Py 119 355
+	]
+	[
+		Px 131 254
+		Py 198 455
+	]
+	[
+		Px 586 774
+		Py 145 306
+	]
+	[
+		Px 511 422
+		Py 196 435
+	]
+}
